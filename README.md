@@ -6,9 +6,9 @@ A command-line tool to list your installed Cargo binaries. I found myself someti
 
 | Source | Command |
 | ------ | ------- |
-| [crates.io](https://crates.io/crates/cargo-bins) | `cargo install cargo-bins` |
+| [crates.io](https://crates.io/crates/cargo-bins) | `cargo install cargo-bins` or `cargo install cargo-bins --no-default-features` for no colored output |
 | [cargo-binstall](https://github.com/cargo-bins/cargo-binstall) | `cargo binstall cargo-bins` |
-| [GitHub](https://github.com/DarkCeptor44/cargo-bins) | `cargo install --git https://github.com/DarkCeptor44/cargo-bins.git` |
+| [GitHub](https://github.com/DarkCeptor44/cargo-bins) | `cargo install --git https://github.com/DarkCeptor44/cargo-bins.git` or `cargo install --git https://github.com/DarkCeptor44/cargo-bins.git --no-default-features` for no colored output |
 
 ## Usage
 

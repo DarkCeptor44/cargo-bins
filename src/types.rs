@@ -1,8 +1,7 @@
-use colored::Colorize;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::{fmt::Display, fs::DirEntry};
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
 pub(crate) struct Binary {
     pub(crate) name: String,
     pub(crate) path: String,
@@ -19,6 +18,6 @@ impl From<DirEntry> for Binary {
 
 impl Display for Binary {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name.blue())
+        write!(f, "{}", self.name)
     }
 }

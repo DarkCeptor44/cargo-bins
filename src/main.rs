@@ -4,11 +4,13 @@
 mod types;
 
 use clap::Parser;
-use colored::Colorize;
 use dirs::home_dir;
 use serde_json::json;
 use std::{fs::read_dir, process::exit};
 use types::Binary;
+
+#[cfg(feature = "color")]
+use colored::Colorize;
 
 #[derive(Parser)]
 #[command(author,version,about,long_about=None)]
@@ -22,7 +24,12 @@ struct App {
 
 fn main() {
     if let Err(e) = App::run() {
+        #[cfg(feature = "color")]
         eprintln!("{} {}", "cargo-bins:".red().bold(), e.to_string().red());
+
+        #[cfg(not(feature = "color"))]
+        eprintln!("cargo-bins: {e}");
+
         exit(1);
     }
 }
@@ -47,12 +54,23 @@ impl App {
         }
 
         if args.reverse {
-            files.sort_by(|a, b| b.name.cmp(&a.name));
+            files.sort_by(|a, b| b.name.to_lowercase().cmp(&a.name.to_lowercase()));
         }
 
-        println!("{}", "Binaries in ~/.cargo/bin:".green().bold());
+        let msg = "Binaries in ~/.cargo/bin:";
+
+        #[cfg(feature = "color")]
+        println!("{}", msg.green().bold());
+
+        #[cfg(not(feature = "color"))]
+        println!("{msg}");
+
         for file in &files {
-            println!("  {file}");
+            #[cfg(feature = "color")]
+            println!("  {}", file.name.blue());
+
+            #[cfg(not(feature = "color"))]
+            println!("  {}", file.name);
         }
 
         Ok(())
