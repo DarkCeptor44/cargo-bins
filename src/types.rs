@@ -1,7 +1,7 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use std::{fmt::Display, fs::DirEntry};
 
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Serialize)]
 pub(crate) struct Binary {
     pub(crate) name: String,
     pub(crate) path: String,
