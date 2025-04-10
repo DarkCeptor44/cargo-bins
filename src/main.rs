@@ -3,6 +3,7 @@
 
 mod types;
 
+use anyhow::{Result, anyhow};
 use clap::Parser;
 use dirs::home_dir;
 use serde_json::json;
@@ -35,18 +36,9 @@ fn main() {
 }
 
 impl App {
-    fn run() -> Result<(), Box<dyn std::error::Error>> {
+    fn run() -> Result<()> {
         let args = App::parse();
-        let home_dir = home_dir().ok_or("Failed to get home directory")?;
-        let cargo_path = home_dir.join(".cargo").join("bin");
-
-        let mut files: Vec<Binary> = read_dir(cargo_path)?
-            .filter_map(Result::ok)
-            .map(|e| Binary {
-                name: e.file_name().to_string_lossy().to_string(),
-                path: e.path().display().to_string(),
-            })
-            .collect();
+        let mut files = cargo_binaries()?;
 
         if args.json {
             println!("{}", json!(files));
@@ -73,6 +65,47 @@ impl App {
             println!("  {}", file.name);
         }
 
+        Ok(())
+    }
+}
+
+/// Returns a list of binaries in the `~/.cargo/bin` directory
+///
+/// ## Returns
+///
+/// `Vec<Binary>` - A list of [binaries](Binary)
+///
+/// ## Errors
+///
+/// Returns an error if:
+///
+/// - Failed to get home directory
+/// - `~/.cargo/bin` is not a directory
+/// - Failed to read directory
+pub(crate) fn cargo_binaries() -> Result<Vec<Binary>> {
+    let home_dir = home_dir().ok_or(anyhow!("failed to get home directory"))?;
+    let cargo_path = home_dir.join(".cargo").join("bin");
+
+    if !cargo_path.is_dir() {
+        return Err(anyhow!("`{}` is not a directory", cargo_path.display()));
+    }
+
+    let binaries = read_dir(cargo_path)?
+        .filter_map(Result::ok)
+        .map(Binary::from)
+        .collect();
+
+    Ok(binaries)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_cargo_binaries() -> Result<()> {
+        let binaries = cargo_binaries()?;
+        assert!(!binaries.is_empty());
         Ok(())
     }
 }
