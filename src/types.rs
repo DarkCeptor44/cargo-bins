@@ -2,9 +2,9 @@ use serde::Serialize;
 use std::{fmt::Display, fs::DirEntry};
 
 #[derive(Debug, Serialize)]
-pub(crate) struct Binary {
-    pub(crate) name: String,
-    pub(crate) path: String,
+pub struct Binary {
+    pub name: String,
+    pub path: String,
 }
 
 impl From<DirEntry> for Binary {

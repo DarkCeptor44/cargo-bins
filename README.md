@@ -16,13 +16,12 @@ A command-line tool to list your installed Cargo binaries. I found myself someti
 $ cargo bins -h
 Lists all installed Cargo binaries
 
-Usage: cargo bins [OPTIONS]
+Usage: cargo-bins.exe bins [OPTIONS]
 
 Options:
       --json     JSON output
       --reverse  Reverse sort
   -h, --help     Print help
-  -V, --version  Print version
 ```
 
 ## Example
